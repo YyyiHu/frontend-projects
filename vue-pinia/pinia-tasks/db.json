@@ -1,0 +1,52 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Learn Vue.js basics",
+      "isFav": true,
+      "createdAt": "2024-03-20T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "title": "Master Pinia state management",
+      "isFav": true,
+      "createdAt": "2024-03-20T11:30:00Z"
+    },
+    {
+      "id": 3,
+      "title": "Build a todo app",
+      "isFav": false,
+      "createdAt": "2024-03-20T14:15:00Z"
+    },
+    {
+      "id": 4,
+      "title": "Study Vue Router",
+      "isFav": false,
+      "createdAt": "2024-03-20T16:45:00Z"
+    },
+    {
+      "id": 5,
+      "title": "Practice component composition",
+      "isFav": true,
+      "createdAt": "2024-03-20T18:20:00Z"
+    },
+    {
+      "id": 6,
+      "title": "Learn Vue DevTools",
+      "isFav": false,
+      "createdAt": "2024-03-21T09:00:00Z"
+    },
+    {
+      "id": 7,
+      "title": "Study Vue 3 Composition API",
+      "isFav": true,
+      "createdAt": "2024-03-21T10:30:00Z"
+    },
+    {
+      "id": 8,
+      "title": "Create a portfolio project",
+      "isFav": false,
+      "createdAt": "2024-03-21T13:15:00Z"
+    }
+  ]
+}

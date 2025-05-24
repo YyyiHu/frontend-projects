@@ -1,0 +1,29 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "play gloomhaven",
+      "isFav": true
+    },
+    {
+      "id": 2,
+      "title": "mow the lawn",
+      "isFav": false
+    },
+    {
+      "id": 3,
+      "title": "become an elden lord",
+      "isFav": true
+    },
+    {
+      "id": 4,
+      "title": "write Pinia tutorial notes",
+      "isFav": false
+    },
+    {
+      "id": 5,
+      "title": "watch Vue 3 course",
+      "isFav": true
+    }
+  ]
+}
