@@ -5,7 +5,6 @@
       <h1>Task Manager</h1>
     </header>
 
-    <!-- new task form -->
     <div class="new-task-form">
       <TaskForm />
     </div>
@@ -19,52 +18,41 @@
       </button>
     </nav>
 
-    <!-- task list -->
+    <div v-if="loading" class="loading">Loading tasks...</div>
+
     <div class="task-list" v-if="filter === 'all'">
-      <p class="task-count">
-        You have {{ taskStore.totalCount }} tasks left to do
-      </p>
+      <p class="task-count">You have {{ totalCount }} tasks left to do</p>
       <div class="tasks">
-        <TaskDetails
-          v-for="task in taskStore.tasks"
-          :key="task.id"
-          :task="task"
-        />
+        <TaskDetails v-for="task in tasks" :key="task.id" :task="task" />
       </div>
     </div>
 
-    <div class="task-list" v-if="filter === 'favs'">
-      <p class="task-count">
-        You have {{ taskStore.favCount }} favs left to do
-      </p>
+    <div class="task-list" v-else-if="filter === 'favs'">
+      <p class="task-count">You have {{ favCount }} favs left to do</p>
       <div class="tasks">
-        <TaskDetails
-          v-for="task in taskStore.favs"
-          :key="task.id"
-          :task="task"
-        />
+        <TaskDetails v-for="task in favs" :key="task.id" :task="task" />
       </div>
     </div>
+
+    <button class="reset-btn" @click="taskStore.$reset">Reset the store</button>
   </main>
 </template>
 
-<script>
-import { ref } from "vue";
-import TaskDetails from "./components/TaskDetails.vue";
+<script setup>
+import { ref, onMounted } from "vue";
 import TaskForm from "./components/TaskForm.vue";
+import TaskDetails from "./components/TaskDetails.vue";
 import { useTaskStore } from "./stores/TaskStore";
 import "./assets/main.css";
+import { storeToRefs } from "pinia";
 
-export default {
-  components: { TaskDetails, TaskForm },
-  setup() {
-    const taskStore = useTaskStore();
+const filter = ref("all");
+const taskStore = useTaskStore();
+const { tasks, loading, favs, totalCount, favCount } = storeToRefs(taskStore);
 
-    const filter = ref("all");
-
-    return { taskStore, filter };
-  },
-};
+onMounted(() => {
+  taskStore.getTasks();
+});
 </script>
 
 <style>
@@ -95,38 +83,41 @@ header h1 {
   font-size: 2.5rem;
 }
 
+.new-task-form {
+  margin-bottom: 2rem;
+}
+
 .filter {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   margin: 2rem 0;
-  flex-wrap: wrap;
 }
 
 .filter button {
+  flex: 1 1 120px;
   padding: 0.8rem 1.5rem;
-  border: none;
-  border-radius: 6px;
-  background: #e9ecef;
-  color: #495057;
   font-size: 1rem;
   font-weight: 600;
+  color: #495057;
+  background-color: #e9ecef;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  flex: 1;
-  min-width: 120px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .filter button:hover {
-  background: #dee2e6;
+  background-color: #dee2e6;
 }
 
 .filter button.active {
-  background: #4dabf7;
-  color: white;
+  background-color: #4dabf7;
+  color: #ffffff;
 }
 
 .task-list {
-  background: white;
+  background-color: #ffffff;
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -144,11 +135,28 @@ header h1 {
   gap: 1rem;
 }
 
-.new-task-form {
-  margin-bottom: 2rem;
+.reset-btn {
+  margin-top: 2rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #fa5252;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-/* Responsive styles */
+.reset-btn:hover {
+  background-color: #e03131;
+}
+
+.reset-btn:active {
+  transform: scale(0.98);
+}
+
 @media (max-width: 768px) {
   main {
     padding: 1rem;

@@ -1,12 +1,11 @@
 import { defineStore } from "pinia";
-// Naming convention
+import axios from "axios";
 export const useTaskStore = defineStore("taskStore", {
   state: () => ({
-    tasks: [
-      { id: 1, title: "cheese", isFav: false },
-      { id: 2, title: "liurouduan", isFav: true },
-    ],
+    tasks: [],
+    loading: false,
   }),
+  // computed fields
   getters: {
     favs() {
       // this refers to the state object
@@ -24,17 +23,49 @@ export const useTaskStore = defineStore("taskStore", {
     },
   },
   actions: {
-    addTask(task) {
-      this.tasks.push(task);
+    async getTasks() {
+      this.loading = true;
+      try {
+        const res = await axios.get("http://localhost:3000/tasks");
+        this.tasks = res.data;
+      } catch (err) {
+        console.error("Failed to fetch tasks:", err);
+      } finally {
+        this.loading = false;
+      }
     },
-    deleteTask(id) {
-      this.tasks = this.tasks.filter((t) => {
-        return t.id !== id;
-      });
+
+    async addTask(task) {
+      try {
+        const taskWithStringId = { ...task, id: String(task.id) };
+        this.tasks.push(taskWithStringId);
+        await axios.post("http://localhost:3000/tasks", taskWithStringId);
+      } catch (err) {
+        console.error("Failed to add task:", err);
+      }
     },
-    toggleFav(id) {
+
+    async deleteTask(id) {
+      try {
+        this.tasks = this.tasks.filter((t) => t.id !== id);
+        await axios.delete("http://localhost:3000/tasks/" + String(id));
+      } catch (err) {
+        console.error("Failed to delete task:", err);
+      }
+    },
+
+    async toggleFav(id) {
       const task = this.tasks.find((t) => t.id === id);
+      if (!task) return;
       task.isFav = !task.isFav;
+
+      try {
+        await axios.patch("http://localhost:3000/tasks/" + String(id), {
+          isFav: task.isFav,
+        });
+      } catch (err) {
+        console.error("Failed to toggle favorite:", err);
+      }
     },
   },
 });
