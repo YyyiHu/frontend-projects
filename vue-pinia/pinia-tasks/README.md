@@ -85,4 +85,4 @@ Create a `.env` file in the root directory based on `.env.example`. Required var
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License.
